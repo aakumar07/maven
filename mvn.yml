@@ -1,0 +1,25 @@
+---
+- hosts: n1
+  become: true
+  tasks:
+    - name: Installing wget
+      yum: name=wget state=present
+    - name: Installing git
+      yum: name=git state=present
+    - name: git clone
+      git:
+        repo: 'https://github.com/aakumar07/maven.git'
+        dest: "/home/ec2-user/ansible-app"
+        clone: yes
+    - name: Java instlling
+      yum: name=java-1.8.0-openjdk-devel.x86_64 state=present
+    - name: maven repos installing
+      get_url:
+        url: http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo
+        dest: /etc/yum.repos.d/epel-apache-maven.repo
+    - name: repos adding
+      command: sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
+    - name: maven installing
+      yum: name=apache-maven state=present
+    - name: applying maven goals
+      command: mvn -f "/home/ec2-user/ansible-app/new_web" clean package

@@ -1,0 +1,6 @@
+---
+ - hosts: n2
+   become: true
+   tasks:
+    - name: calling script for sonarqube install
+      script: /home/ec2-user/ansible-app/sq.sh

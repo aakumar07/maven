@@ -1,0 +1,15 @@
+n1 ansible_host=172.31.36.101
+n2 ansible_host=172.31.39.95
+n3 ansible_host=172.31.33.8
+
+[mygroup]
+n1
+n2
+n3
+
+[allservers:children]
+mygroup
+
+[allservers:vars]
+ansible_user=ec2-user
+ansible_ssh_private_key_file=/tmp/connect_key.pem

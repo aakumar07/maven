@@ -1,0 +1,41 @@
+---
+ - hosts: n3
+   become: true
+   tasks:
+     - name: Installing wget
+       yum: name=wget state=present
+     - name: Java Installing
+       yum: name=java-1.8.0-openjdk-devel.x86_64 state=present
+     - name: Installing Nexus
+       get_url:
+         url: "https://download.sonatype.com/nexus/3/latest-unix.tar.gz"
+         dest: "/opt"
+     - name: Extrat the tar 
+       unarchive:
+         src: "/opt/nexus-3.60.0-02-unix.tar.gz"
+         dest: "/opt"
+         remote_src: yes
+           #- name: chnage the directory name
+           #command: mv "/opt/nexus-3.60.0-02" "/opt/nexus3"
+     - name: changeing the ownership permisiions
+       ansible.builtin.file:
+        path: "/opt/nexus3"
+        owner: ec2-user
+        group: ec2-user
+     - name: COP
+       ansible.builtin.file:
+        path: "/opt/sonatype-work"
+        owner: ec2-user
+        group: ec2-user
+     - name: adding the ec2-user to nexus.rc
+       lineinfile:
+        path: /opt/nexus3/bin/nexus.rc
+        line: run_as_user="ec2-user"
+        insertafter: "#"
+     - name: creating soft link
+       ansible.builtin.file:
+         src: "/opt/nexus3/bin/nexus"
+         dest: "/etc/init.d/nexus"
+         state: link
+     - name: adding checkconfig
+       script: /home/ec2-user/ansible-app/nexus.sh

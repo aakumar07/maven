@@ -1,0 +1,6 @@
+---
+ - hosts: n1
+   become: true
+   tasks:
+    - name: Exuting the script
+      script: /home/ec2-user/ansible-app/mv.sh 

@@ -1,0 +1,6 @@
+---
+ - hosts: n3
+   become: true
+   tasks:
+    - name: calling script for insatiing nexus
+      script: /home/ec2-user/ansible-app/nx.sh
