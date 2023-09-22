@@ -3,4 +3,4 @@
    become: true
    tasks:
     - name: Exuting the script
-      script: /home/ec2-user/ansible-app/mv.sh 
+      script: /var/lib/jenkins/workspace/ansi-job/mv.sh 
